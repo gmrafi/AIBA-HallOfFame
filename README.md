@@ -5,6 +5,7 @@ A dynamic, single-file website powered by Tailwind CSS (CDN) and Alpine.js. It i
 ## Features
 
 - Responsive UI with a clean hero section and brand accents
+- AIBA-style green→blue theme (emerald/blue) with gradient highlights
 - Live search across title, team/authors, and tags
 - Filters: category chips and year dropdown
 - Sorting: newest/oldest and title A→Z/Z→A
@@ -33,7 +34,8 @@ Edit the `seed()` function near the bottom of `index.html`. Each achievement obj
 {
   id: Number,
   title: String,
-  subtitle: String,     // team/authors
+  team: String,         // team/authors (preferred)
+  subtitle: String,     // optional legacy field; shown if team is missing
   date: 'YYYY-MM-DD',   // sortable ISO-like date
   category: 'Competition' | 'Research' | 'Event' | 'Sports' | 'Community',
   location: String,
@@ -49,3 +51,4 @@ To use local images, place them next to `index.html` (e.g., in an `images/` fold
 
 - Tailwind and Inter font are loaded via CDN; Alpine.js provides the interactivity.
 - No external CSS or build tooling required. Everything is in a single HTML file.
+

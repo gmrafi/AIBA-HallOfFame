@@ -307,8 +307,8 @@
             this.stats.total = this.data.length;
             this.stats.categories = new Set(this.data.map(d => d.category)).size;
             this.stats.latestYear = Math.max(...this.data.map(d => new Date(d.date).getFullYear()));
-            // naive people count by splitting names by comma/and in subtitle
-            const names = this.data.flatMap(d => (d.subtitle || '').split(/[,&()]/).map(s => s.trim()).filter(s => /[A-Za-z]/.test(s)));
+            // naive people count by splitting names by comma/and in team/subtitle
+            const names = this.data.flatMap(d => (d.team || d.subtitle || '').split(/[,&()]/).map(s => s.trim()).filter(s => /[A-Za-z]/.test(s)));
             this.stats.people = new Set(names).size || this.data.length; // fallback
           },
 
@@ -318,7 +318,7 @@
             const hasCats = this.selectedCategories.length > 0;
 
             let arr = this.data.filter(d => {
-              const matchQuery = !q || [d.title, d.subtitle, d.description, ...(d.tags||[])].join(' ').toLowerCase().includes(q);
+              const matchQuery = !q || [d.title, (d.team || d.subtitle), d.description, ...(d.tags||[])].join(' ').toLowerCase().includes(q);
               const matchYear = !year || new Date(d.date).getFullYear().toString() === year.toString();
               const matchCat = !hasCats || this.selectedCategories.includes(d.category);
               return matchQuery && matchYear && matchCat;
@@ -363,7 +363,7 @@
             {
               id: 1,
               title: 'NASA Space Apps 2025',
-              subtitle: 'Team: AIBA SpaceWeb (Rafy, Afsara)',
+              team: 'AIBA SpaceWeb (Rafy, Afsara)',
               date: '2025-10-26',
               category: 'Competition',
               location: 'Sylhet',
@@ -374,7 +374,7 @@
             {
               id: 2,
               title: 'AIBA National Half Marathon',
-              subtitle: 'Team: Core Organizing Team',
+              team: 'Core Organizing Team',
               date: '2025-09-14',
               category: 'Event',
               location: 'Sylhet',
@@ -385,7 +385,7 @@
             {
               id: 3,
               title: 'ICCTASS 2025',
-              subtitle: 'Authors: Fariha F. Proma, GM Rafi',
+              team: 'Fariha F. Proma, GM Rafi',
               date: '2025-11-03',
               category: 'Research',
               location: 'Dhaka',
@@ -396,7 +396,7 @@
             {
               id: 4,
               title: 'Inter-University Programming Contest',
-              subtitle: 'Team: AIBA Coders (Rafi, Proma, Afsara)',
+              team: 'AIBA Coders (Rafi, Proma, Afsara)',
               date: '2024-08-18',
               category: 'Competition',
               location: 'Chittagong',
@@ -407,7 +407,7 @@
             {
               id: 5,
               title: 'National Research Grant Award',
-              subtitle: 'Authors: Fariha F. Proma, GM Rafi',
+              team: 'Fariha F. Proma, GM Rafi',
               date: '2023-12-01',
               category: 'Research',
               location: 'Sylhet',
@@ -418,7 +418,7 @@
             {
               id: 6,
               title: 'Community Tech Bootcamp',
-              subtitle: 'Mentors: AIBA Dev Club',
+              team: 'AIBA Dev Club (Mentors)',
               date: '2025-02-15',
               category: 'Community',
               location: 'Sylhet',
@@ -429,7 +429,7 @@
             {
               id: 7,
               title: 'University Sports Fest – Football',
-              subtitle: 'Team: AIBA United',
+              team: 'AIBA United',
               date: '2024-11-21',
               category: 'Sports',
               location: 'Sylhet',
@@ -440,7 +440,7 @@
             {
               id: 8,
               title: 'Robotics Challenge – Line Follower',
-              subtitle: 'Team: RoboAIBA',
+              team: 'RoboAIBA',
               date: '2023-09-05',
               category: 'Competition',
               location: 'Dhaka',
@@ -451,7 +451,7 @@
             {
               id: 9,
               title: 'Open Source Contribution Sprint',
-              subtitle: 'Team: AIBA OSS',
+              team: 'AIBA OSS',
               date: '2025-06-22',
               category: 'Community',
               location: 'Online',
@@ -462,7 +462,7 @@
             {
               id: 10,
               title: 'Data Science Symposium Poster',
-              subtitle: 'Authors: Afsara, Rafy',
+              team: 'Afsara, Rafy',
               date: '2024-03-09',
               category: 'Research',
               location: 'Dhaka',
@@ -473,7 +473,7 @@
             {
               id: 11,
               title: 'AIBA Tech Fair 2025',
-              subtitle: 'Team: Organizing Committee',
+              team: 'Organizing Committee',
               date: '2025-01-25',
               category: 'Event',
               location: 'Sylhet',
@@ -484,7 +484,7 @@
             {
               id: 12,
               title: 'Inter-Dept Basketball Tournament',
-              subtitle: 'Team: AIBA Hoops',
+              team: 'AIBA Hoops',
               date: '2023-07-12',
               category: 'Sports',
               location: 'Sylhet',
