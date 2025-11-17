@@ -1,0 +1,500 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AIBA Sylhet - Hall of Fame</title>
+
+    <!-- Google Font: Inter (400, 600, 700) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      // Tailwind CDN config: enable dark mode via class and emerald glow
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            boxShadow: {
+              glow: '0 8px 30px rgba(16,185,129,0.25)',
+            },
+          },
+        },
+      };
+    </script>
+
+    <!-- Alpine.js for interactivity -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <!-- Minimal helper to map `font-inter` to Inter without external CSS file -->
+    <style>
+      .font-inter {
+        font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+          Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji",
+          "Segoe UI Symbol";
+      }
+      /* Decorative gradient background helpers */
+      .gradient-grid {
+        background-image: radial-gradient(circle at 1px 1px, rgba(0,0,0,0.08) 1px, transparent 0);
+        background-size: 24px 24px;
+      }
+    </style>
+  </head>
+  <body x-data="hofApp()" x-init="init()" :class="theme" class="bg-gray-50 dark:bg-gray-950 font-inter">
+    <!-- Navbar -->
+    <nav class="sticky top-0 z-40 backdrop-blur supports-[backdrop-filter]:bg-white/70 dark:supports-[backdrop-filter]:bg-gray-900/70 bg-white/90 dark:bg-gray-900/90 text-gray-900 dark:text-gray-100 border-b border-gray-200 dark:border-gray-800">
+      <div class="container mx-auto px-6 py-4 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-lg bg-gradient-to-tr from-emerald-600 to-blue-600 shadow-glow"></div>
+          <h1 class="text-xl sm:text-2xl font-bold tracking-tight">AIBA Hall of Fame</h1>
+        </div>
+        <div class="flex items-center gap-2">
+          <button @click="toggleTheme" class="inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm border border-gray-200 dark:border-gray-800 hover:bg-gray-100 dark:hover:bg-gray-800 transition">
+            <svg x-show="theme==='dark'" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor"><path d="M21.64 13a1 1 0 0 0-1.05-.14A8 8 0 1 1 11.14 3.41a1 1 0 0 0-.14-1.05A1 1 0 0 0 10 2a10 10 0 1 0 10 10 1 1 0 0 0-.36-.99z"/></svg>
+            <svg x-show="theme==='light'" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor"><path d="M6.76 4.84l-1.8-1.79-1.41 1.41 1.79 1.8 1.42-1.42zm10.48 14.32l1.79 1.8 1.41-1.41-1.8-1.79-1.4 1.4zM1 13h3v-2H1v2zm19 0h3v-2h-3v2zM4.95 19.07l1.41 1.41 1.8-1.79-1.42-1.42-1.79 1.8zM18.36 4.22l-1.41-1.41-1.8 1.79 1.42 1.42 1.79-1.8zM12 4a1 1 0 0 0 1-1V1h-2v2a1 1 0 0 0 1 1zm0 16a1 1 0 0 0-1 1v2h2v-2a1 1 0 0 0-1-1zm0-14a7 7 0 1 0 0 14 7 7 0 0 0 0-14z"/></svg>
+            <span class="hidden sm:inline" x-text="theme==='dark' ? 'Dark' : 'Light'"></span>
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Hero -->
+    <header class="relative overflow-hidden">
+      <div class="absolute inset-0 gradient-grid opacity-40 dark:opacity-20"></div>
+      <div class="bg-gradient-to-b from-emerald-50 to-transparent dark:from-gray-900">
+        <div class="container mx-auto px-6 pt-10 pb-12">
+          <div class="text-center max-w-3xl mx-auto">
+            <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-emerald-200 text-emerald-800 bg-white/80 dark:bg-gray-900/70 dark:border-emerald-800 text-sm">Army Institute of Business Administration, Sylhet</span>
+            <h2 class="mt-4 text-4xl sm:text-5xl font-extrabold tracking-tight text-gray-900 dark:text-white">
+              Hall of Fame
+            </h2>
+            <p class="mt-3 text-lg sm:text-xl text-gray-600 dark:text-gray-300">
+              Celebrating our students' achievements across research, competitions, and community impact.
+            </p>
+            <div class="mt-6 flex flex-col sm:flex-row gap-3 justify-center">
+              <div class="relative flex-1 sm:max-w-md">
+                <span class="absolute inset-y-0 left-3 flex items-center text-gray-400">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor"><path d="M10 2a8 8 0 105.293 14.293l4.707 4.707 1.414-1.414-4.707-4.707A8 8 0 0010 2zm0 2a6 6 0 110 12A6 6 0 0110 4z"/></svg>
+                </span>
+                <input x-model.debounce.300ms="query" type="text" placeholder="Search by title, team, tags..." class="w-full pl-10 pr-3 py-3 rounded-xl border border-gray-200 dark:border-gray-800 bg-white/70 dark:bg-gray-900/70 backdrop-blur placeholder:text-gray-400 text-gray-900 dark:text-gray-100" />
+              </div>
+              <div class="flex gap-3 justify-center">
+                <select x-model="filters.year" class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white/70 dark:bg-gray-900/70 px-3 py-3 text-gray-900 dark:text-gray-100">
+                  <option value="">All Years</option>
+                  <template x-for="y in years" :key="y">
+                    <option :value="y" x-text="y"></option>
+                  </template>
+                </select>
+                <select x-model="sort" class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white/70 dark:bg-gray-900/70 px-3 py-3 text-gray-900 dark:text-gray-100">
+                  <option value="date-desc">Newest first</option>
+                  <option value="date-asc">Oldest first</option>
+                  <option value="title-asc">Title A→Z</option>
+                  <option value="title-desc">Title Z→A</option>
+                </select>
+              </div>
+            </div>
+            <!-- Category chips -->
+            <div class="mt-5 flex flex-wrap gap-2 justify-center">
+              <template x-for="cat in categories" :key="cat">
+                <button @click="toggleCategory(cat)" :class="selectedCategories.includes(cat) ? 'bg-emerald-600 text-white border-emerald-600' : 'bg-white/70 dark:bg-gray-900/70 text-gray-700 dark:text-gray-200'" class="px-3 py-1.5 rounded-full text-sm border hover:shadow">
+                  <span x-text="cat"></span>
+                </button>
+              </template>
+            </div>
+          </div>
+          <!-- Stats -->
+          <div class="mt-10 grid grid-cols-2 sm:grid-cols-4 gap-4">
+            <div class="rounded-2xl border border-gray-200 dark:border-gray-800 p-4 bg-white/70 dark:bg-gray-900/70">
+              <div class="text-xs text-gray-500">Total Achievements</div>
+              <div class="mt-1 text-2xl font-bold" x-text="stats.total"></div>
+            </div>
+            <div class="rounded-2xl border border-gray-200 dark:border-gray-800 p-4 bg-white/70 dark:bg-gray-900/70">
+              <div class="text-xs text-gray-500">Categories</div>
+              <div class="mt-1 text-2xl font-bold" x-text="stats.categories"></div>
+            </div>
+            <div class="rounded-2xl border border-gray-200 dark:border-gray-800 p-4 bg-white/70 dark:bg-gray-900/70">
+              <div class="text-xs text-gray-500">Latest Year</div>
+              <div class="mt-1 text-2xl font-bold" x-text="stats.latestYear"></div>
+            </div>
+            <div class="rounded-2xl border border-gray-200 dark:border-gray-800 p-4 bg-white/70 dark:bg-gray-900/70">
+              <div class="text-xs text-gray-500">People Involved</div>
+              <div class="mt-1 text-2xl font-bold" x-text="stats.people"></div>
+            </div>
+          </div>
+          <!-- Mission / Vision callouts styled like AIBA -->
+          <div class="mt-12 grid gap-6 md:grid-cols-2">
+            <div class="rounded-2xl border-l-4 border-emerald-700 bg-white/80 dark:bg-gray-900/70 border border-gray-200 dark:border-gray-800 p-6 shadow-sm">
+              <div class="flex items-start gap-4">
+                <div class="h-12 w-12 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center dark:bg-emerald-900/30">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zm0 3a7 7 0 110 14 7 7 0 010-14zm0 2a5 5 0 100 10 5 5 0 000-10z"/></svg>
+                </div>
+                <div>
+                  <h3 class="text-xl font-bold text-gray-900 dark:text-white">Our Mission</h3>
+                  <p class="mt-2 text-gray-600 dark:text-gray-300">Provide students with resources, mentorship, and collaborative opportunities to engage in innovative research, competitions, sports, and community impact.</p>
+                </div>
+              </div>
+            </div>
+            <div class="rounded-2xl border-l-4 border-blue-600 bg-white/80 dark:bg-gray-900/70 border border-gray-200 dark:border-gray-800 p-6 shadow-sm">
+              <div class="flex items-start gap-4">
+                <div class="h-12 w-12 rounded-xl bg-blue-50 text-blue-700 flex items-center justify-center dark:bg-blue-900/30">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.546 4.764L18 8.29l-3.727 2.814L15.454 16 12 13.764 8.546 16l1.181-4.896L6 8.29l4.454-1.526L12 2z"/></svg>
+                </div>
+                <div>
+                  <h3 class="text-xl font-bold text-gray-900 dark:text-white">Our Vision</h3>
+                  <p class="mt-2 text-gray-600 dark:text-gray-300">Inspire and empower AIBA Sylhet students to achieve excellence and be recognized on a modern, inclusive platform.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="py-10">
+      <!-- Achievements Grid -->
+      <div class="container mx-auto px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <template x-for="item in visibleItems" :key="item.id">
+          <div class="group bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+            <div class="relative">
+              <img :src="item.image" :alt="item.title" class="w-full h-56 object-cover" loading="lazy" />
+              <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition"></div>
+              <div class="absolute top-3 left-3">
+                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-white/90 dark:bg-gray-800/90 text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-gray-700" x-text="item.category"></span>
+              </div>
+            </div>
+            <div class="p-6">
+              <p class="text-xs font-semibold text-emerald-700 dark:text-emerald-400" x-text="formatDate(item.date)"></p>
+              <h3 class="text-xl font-bold text-gray-900 dark:text-white mt-1" x-text="item.title"></h3>
+              <p class="text-gray-700 dark:text-gray-300 mt-1 font-medium" x-text="item.subtitle"></p>
+              <p class="text-gray-600 dark:text-gray-400 mt-3 line-clamp-3" x-text="item.description"></p>
+              <div class="mt-4 flex flex-wrap gap-2">
+                <template x-for="t in item.tags" :key="t">
+                  <span class="px-2 py-1 rounded-full text-xs bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700" x-text="t"></span>
+                </template>
+              </div>
+              <div class="mt-5 flex items-center justify-between">
+                <button @click="openModal(item)" class="inline-flex items-center gap-2 text-emerald-700 hover:text-emerald-600 dark:text-emerald-400 dark:hover:text-emerald-300 font-semibold">
+                  View details
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+                </button>
+                <div class="text-xs text-gray-500 dark:text-gray-400" x-text="item.location"></div>
+              </div>
+            </div>
+          </div>
+        </template>
+      </div>
+
+      <!-- Load more -->
+      <div class="container mx-auto px-6">
+        <div class="mt-10 text-center" x-show="visibleItems.length < filtered.length">
+          <button @click="loadMore" class="px-5 py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-blue-600 hover:from-emerald-700 hover:to-blue-700 text-white font-semibold shadow-glow">Load more</button>
+        </div>
+        <div class="mt-10 text-center text-sm text-gray-500 dark:text-gray-400" x-show="filtered.length === 0">
+          No achievements found. Try clearing filters or changing your search.
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="text-center py-10 bg-white/60 dark:bg-gray-900/60 border-t border-gray-200 dark:border-gray-800 mt-12 text-gray-600 dark:text-gray-300">
+      <p>© 2025 AIBA Sylhet. All rights reserved.</p>
+      <p class="mt-1 text-xs">Demo site powered by Tailwind CSS + Alpine.js</p>
+    </footer>
+
+    <!-- Detail Modal -->
+    <div x-show="showModal" x-transition.opacity class="fixed inset-0 z-50 flex items-center justify-center">
+      <div @click="closeModal" class="absolute inset-0 bg-black/50"></div>
+      <div x-trap.noscroll.inert="showModal" class="relative bg-white dark:bg-gray-900 rounded-2xl shadow-2xl max-w-3xl w-[92vw] border border-gray-200 dark:border-gray-800 overflow-hidden" @keydown.escape.window="closeModal">
+        <div class="grid md:grid-cols-2">
+          <img :src="active?.image" :alt="active?.title" class="w-full h-64 md:h-full object-cover">
+          <div class="p-6">
+            <div class="flex items-center justify-between gap-3">
+              <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-gray-700" x-text="active?.category"></span>
+              <button @click="closeModal" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800" aria-label="Close">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor"><path d="M18.3 5.71L12 12.01l-6.3-6.3-1.41 1.41 6.3 6.3-6.3 6.3 1.41 1.41 6.3-6.3 6.3 6.3 1.41-1.41-6.3-6.3 6.3-6.3z"/></svg>
+              </button>
+            </div>
+            <h3 class="mt-3 text-2xl font-bold text-gray-900 dark:text-white" x-text="active?.title"></h3>
+            <p class="text-sm text-emerald-700 dark:text-emerald-400 mt-1" x-text="formatDate(active?.date)"></p>
+            <p class="text-gray-700 dark:text-gray-300 mt-2" x-text="active?.team ? ('Team: ' + active?.team) : active?.subtitle"></p>
+            <p class="text-gray-600 dark:text-gray-400 mt-4" x-text="active?.description"></p>
+            <div class="mt-4 flex flex-wrap gap-2">
+              <template x-for="t in (active?.tags || [])" :key="t">
+                <span class="px-2 py-1 rounded-full text-xs bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700" x-text="t"></span>
+              </template>
+            </div>
+            <div class="mt-6 text-xs text-gray-500 dark:text-gray-400" x-show="active?.location">
+              <span class="font-semibold">Location:</span> <span x-text="active?.location"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- App Script: demo data + behaviors -->
+    <script>
+      function hofApp() {
+        return {
+          theme: 'light',
+          query: '',
+          sort: 'date-desc',
+          filters: { year: '' },
+          categories: ['Competition', 'Research', 'Event', 'Sports', 'Community'],
+          selectedCategories: [],
+          years: [],
+          data: [],
+          filtered: [],
+          visibleItems: [],
+          pageSize: 6,
+          showModal: false,
+          active: null,
+          stats: { total: 0, categories: 0, latestYear: '-', people: 0 },
+
+          init() {
+            // Theme
+            const saved = localStorage.getItem('aiba-hof-theme');
+            this.theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            document.documentElement.classList.toggle('dark', this.theme === 'dark');
+
+            // Demo dataset
+            this.data = this.seed();
+            this.years = Array.from(new Set(this.data.map(d => new Date(d.date).getFullYear()))).sort((a,b) => b-a);
+
+            this.applyFilters();
+            this.computeStats();
+          },
+
+          toggleTheme() {
+            this.theme = this.theme === 'dark' ? 'light' : 'dark';
+            document.documentElement.classList.toggle('dark', this.theme === 'dark');
+            localStorage.setItem('aiba-hof-theme', this.theme);
+          },
+
+          formatDate(d) {
+            if (!d) return '';
+            const date = new Date(d);
+            return date.toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: '2-digit' });
+          },
+
+          toggleCategory(cat) {
+            const i = this.selectedCategories.indexOf(cat);
+            if (i >= 0) this.selectedCategories.splice(i, 1); else this.selectedCategories.push(cat);
+            this.applyFilters(true);
+          },
+
+          loadMore() {
+            const next = this.visibleItems.length + this.pageSize;
+            this.visibleItems = this.filtered.slice(0, next);
+          },
+
+          openModal(item) {
+            this.active = item;
+            this.showModal = true;
+          },
+          closeModal() {
+            this.showModal = false;
+            this.active = null;
+          },
+
+          computeStats() {
+            this.stats.total = this.data.length;
+            this.stats.categories = new Set(this.data.map(d => d.category)).size;
+            this.stats.latestYear = Math.max(...this.data.map(d => new Date(d.date).getFullYear()));
+            // naive people count by splitting names by comma/and in subtitle
+            const names = this.data.flatMap(d => (d.subtitle || '').split(/[,&()]/).map(s => s.trim()).filter(s => /[A-Za-z]/.test(s)));
+            this.stats.people = new Set(names).size || this.data.length; // fallback
+          },
+
+          applyFilters(resetVisible = false) {
+            const q = this.query.trim().toLowerCase();
+            const year = this.filters.year;
+            const hasCats = this.selectedCategories.length > 0;
+
+            let arr = this.data.filter(d => {
+              const matchQuery = !q || [d.title, d.subtitle, d.description, ...(d.tags||[])].join(' ').toLowerCase().includes(q);
+              const matchYear = !year || new Date(d.date).getFullYear().toString() === year.toString();
+              const matchCat = !hasCats || this.selectedCategories.includes(d.category);
+              return matchQuery && matchYear && matchCat;
+            });
+
+            // sort
+            const [field, dir] = this.sort.split('-');
+            arr.sort((a,b) => {
+              if (field === 'date') {
+                const da = new Date(a.date).getTime();
+                const db = new Date(b.date).getTime();
+                return dir === 'asc' ? da - db : db - da;
+              }
+              const ta = a.title.toLowerCase();
+              const tb = b.title.toLowerCase();
+              return dir === 'asc' ? (ta > tb ? 1 : ta < tb ? -1 : 0) : (ta < tb ? 1 : ta > tb ? -1 : 0);
+            });
+
+            this.filtered = arr;
+            this.visibleItems = resetVisible ? arr.slice(0, this.pageSize) : arr.slice(0, Math.max(this.visibleItems.length || this.pageSize, this.pageSize));
+          },
+
+          // Watchers (simple manual)
+        };
+      }
+
+      document.addEventListener('alpine:init', () => {
+        // Manual watchers using mutation of Alpine state
+        Alpine.effect(() => {
+          const state = Alpine.$data(document.body);
+          if (!state) return;
+          // Recompute when query/sort/filters change
+          state.query; state.sort; state.filters.year; state.selectedCategories.length;
+          Promise.resolve().then(() => state.applyFilters(true));
+        });
+      });
+
+      // Demo dataset
+      hofApp.prototype = {
+        seed() {
+          return [
+            {
+              id: 1,
+              title: 'NASA Space Apps 2025',
+              subtitle: 'Team: AIBA SpaceWeb (Rafy, Afsara)',
+              date: '2025-10-26',
+              category: 'Competition',
+              location: 'Sylhet',
+              tags: ['Space', 'Hackathon', 'Runner Up'],
+              image: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1200&auto=format&fit=crop',
+              description: "Successfully achieved 1st Runner Up in the Sylhet region with project 'OrbitBiZ'.",
+            },
+            {
+              id: 2,
+              title: 'AIBA National Half Marathon',
+              subtitle: 'Team: Core Organizing Team',
+              date: '2025-09-14',
+              category: 'Event',
+              location: 'Sylhet',
+              tags: ['Marathon', 'Organizing', 'Web'],
+              image: 'https://images.unsplash.com/photo-1534367610401-9f5ed68180aa?q=80&w=1200&auto=format&fit=crop',
+              description: 'Managed the complete event website and data management for the successful marathon.',
+            },
+            {
+              id: 3,
+              title: 'ICCTASS 2025',
+              subtitle: 'Authors: Fariha F. Proma, GM Rafi',
+              date: '2025-11-03',
+              category: 'Research',
+              location: 'Dhaka',
+              tags: ['Conference', 'Solar', 'Microfinance'],
+              image: 'https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1200&auto=format&fit=crop',
+              description: 'Research paper on "Microfinance-Enabled Solar Home Systems" accepted for presentation.',
+            },
+            {
+              id: 4,
+              title: 'Inter-University Programming Contest',
+              subtitle: 'Team: AIBA Coders (Rafi, Proma, Afsara)',
+              date: '2024-08-18',
+              category: 'Competition',
+              location: 'Chittagong',
+              tags: ['ICPC', 'Algorithms'],
+              image: 'https://images.unsplash.com/photo-1556157382-97eda2d62296?q=80&w=1200&auto=format&fit=crop',
+              description: 'Secured 5th position among 60+ teams with optimized solutions and clean implementations.',
+            },
+            {
+              id: 5,
+              title: 'National Research Grant Award',
+              subtitle: 'Authors: Fariha F. Proma, GM Rafi',
+              date: '2023-12-01',
+              category: 'Research',
+              location: 'Sylhet',
+              tags: ['Grant', 'Energy', 'Innovation'],
+              image: 'https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1200&auto=format&fit=crop',
+              description: 'Awarded a national grant for prototype development of low-cost solar micro-inverters.',
+            },
+            {
+              id: 6,
+              title: 'Community Tech Bootcamp',
+              subtitle: 'Mentors: AIBA Dev Club',
+              date: '2025-02-15',
+              category: 'Community',
+              location: 'Sylhet',
+              tags: ['Mentoring', 'Web', 'Career'],
+              image: 'https://images.unsplash.com/photo-1529336953121-ad5a0d43d0fa?q=80&w=1200&auto=format&fit=crop',
+              description: 'Conducted a 3-day bootcamp on web fundamentals and modern tooling for 80+ students.',
+            },
+            {
+              id: 7,
+              title: 'University Sports Fest – Football',
+              subtitle: 'Team: AIBA United',
+              date: '2024-11-21',
+              category: 'Sports',
+              location: 'Sylhet',
+              tags: ['Football', 'Champion'],
+              image: 'https://images.unsplash.com/photo-1543325995-6fe7a6f6b3f3?q=80&w=1200&auto=format&fit=crop',
+              description: 'Champions after a thrilling final; coordinated training and match analytics.',
+            },
+            {
+              id: 8,
+              title: 'Robotics Challenge – Line Follower',
+              subtitle: 'Team: RoboAIBA',
+              date: '2023-09-05',
+              category: 'Competition',
+              location: 'Dhaka',
+              tags: ['Robotics', 'Electronics'],
+              image: 'https://images.unsplash.com/photo-1581092921461-eab62e97a780?q=80&w=1200&auto=format&fit=crop',
+              description: 'Custom PID implementation achieved top-3 time in a national robotics meet.',
+            },
+            {
+              id: 9,
+              title: 'Open Source Contribution Sprint',
+              subtitle: 'Team: AIBA OSS',
+              date: '2025-06-22',
+              category: 'Community',
+              location: 'Online',
+              tags: ['Open Source', 'GitHub', 'Hacktoberfest'],
+              image: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=1200&auto=format&fit=crop',
+              description: 'Dozens of PRs merged across documentation, accessibility, and performance fixes.',
+            },
+            {
+              id: 10,
+              title: 'Data Science Symposium Poster',
+              subtitle: 'Authors: Afsara, Rafy',
+              date: '2024-03-09',
+              category: 'Research',
+              location: 'Dhaka',
+              tags: ['Poster', 'ML', 'Data'],
+              image: 'https://images.unsplash.com/photo-1515879218367-8466d910aaa4?q=80&w=1200&auto=format&fit=crop',
+              description: 'Presented findings on community health dataset analysis and model interpretability.',
+            },
+            {
+              id: 11,
+              title: 'AIBA Tech Fair 2025',
+              subtitle: 'Team: Organizing Committee',
+              date: '2025-01-25',
+              category: 'Event',
+              location: 'Sylhet',
+              tags: ['Expo', 'Showcase'],
+              image: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=1200&auto=format&fit=crop',
+              description: 'Hosted 40+ booths with interactive demos; handled logistics and digital registration.',
+            },
+            {
+              id: 12,
+              title: 'Inter-Dept Basketball Tournament',
+              subtitle: 'Team: AIBA Hoops',
+              date: '2023-07-12',
+              category: 'Sports',
+              location: 'Sylhet',
+              tags: ['Basketball', 'Runner Up'],
+              image: 'https://images.unsplash.com/photo-1546519638-68e109498ffc?q=80&w=1200&auto=format&fit=crop',
+              description: 'Secured 2nd place; focused on team defense and rotations.',
+            },
+          ];
+        }
+      };
+    </script>
+  </body>
+</html>
