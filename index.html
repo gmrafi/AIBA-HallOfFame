@@ -364,7 +364,7 @@
     </div>
 
     <!-- Background audio: place your licensed/owned file at assets/audio/hall-of-fame.mp3 -->
-    <audio id="bg-audio" preload="auto" src="assets/audio/hall-of-fame.mp3"></audio>
+    <audio id="bg-audio" preload="auto" src="music/The Script - Hall Of Fame (Lyrics).mp3"></audio>
 
     <!-- App Script: demo data + behaviors -->
     <script>
@@ -425,6 +425,15 @@
 
             this.applyFilters();
             this.computeStats();
+
+            // Audio setup: set default volume and sync playing state
+            const audio = document.getElementById('bg-audio');
+            if (audio) {
+              audio.volume = 0.6;
+              audio.addEventListener('play', () => this.audioPlaying = true);
+              audio.addEventListener('pause', () => this.audioPlaying = false);
+              audio.addEventListener('ended', () => this.audioPlaying = false);
+            }
           },
 
           toggleAudio() {
