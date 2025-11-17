@@ -140,7 +140,7 @@
       }
     </style>
   </head>
-  <body x-data="hofApp()" x-init="init()" :class="theme" class="bg-gray-50 dark:bg-gray-950 font-inter">
+  <body x-data="hofApp()" x-init="init()" class="bg-gray-50 font-inter">
     <!-- Navbar -->
     <nav class="sticky top-0 z-40 backdrop-blur supports-[backdrop-filter]:bg-white/80 dark:supports-[backdrop-filter]:bg-gray-900/70 bg-white/95 dark:bg-gray-900/90 text-gray-900 dark:text-gray-100 border-b border-gray-200 dark:border-gray-800">
       <div class="container mx-auto px-6 py-4 flex items-center justify-between">
@@ -149,10 +149,10 @@
           <h1 class="text-xl sm:text-2xl font-bold tracking-tight" style="color: var(--brand-green)">AIBA Hall of Fame</h1>
         </div>
         <div class="flex items-center gap-2">
-          <button @click="toggleTheme" class="inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm border border-gray-200 dark:border-gray-800 hover:bg-gray-100 dark:hover:bg-gray-800 transition">
-            <svg x-show="theme==='dark'" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor"><path d="M21.64 13a1 1 0 0 0-1.05-.14A8 8 0 1 1 11.14 3.41a1 1 0 0 0-.14-1.05A1 1 0 0 0 10 2a10 10 0 1 0 10 10 1 1 0 0 0-.36-.99z"/></svg>
-            <svg x-show="theme==='light'" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor"><path d="M6.76 4.84l-1.8-1.79-1.41 1.41 1.79 1.8 1.42-1.42zm10.48 14.32l1.79 1.8 1.41-1.41-1.8-1.79-1.4 1.4zM1 13h3v-2H1v2zm19 0h3v-2h-3v2zM4.95 19.07l1.41 1.41 1.8-1.79-1.42-1.42-1.79 1.8zM18.36 4.22l-1.41-1.41-1.8 1.79 1.42 1.42 1.79-1.8zM12 4a1 1 0 0 0 1-1V1h-2v2a1 1 0 0 0 1 1zm0 16a1 1 0 0 0-1 1v2h2v-2a1 1 0 0 0-1-1zm0-14a7 7 0 1 0 0 14 7 7 0 0 0 0-14z"/></svg>
-            <span class="hidden sm:inline" x-text="theme==='dark' ? 'Dark' : 'Light'"></span>
+          <button @click="toggleAudio" class="inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm border border-gray-200 hover:bg-gray-100 transition" title="Play/Pause">
+            <svg x-show="!audioPlaying" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+            <svg x-show="audioPlaying" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+            <span class="hidden sm:inline" x-text="audioPlaying ? 'Pause Song' : 'Play Song'"></span>
           </button>
         </div>
       </div>
@@ -363,6 +363,9 @@
       </div>
     </div>
 
+    <!-- Background audio: place your licensed/owned file at assets/audio/hall-of-fame.mp3 -->
+    <audio id="bg-audio" preload="auto" src="assets/audio/hall-of-fame.mp3"></audio>
+
     <!-- App Script: demo data + behaviors -->
     <script>
       function hofApp() {
@@ -381,6 +384,7 @@
           showModal: false,
           active: null,
           stats: { total: 0, categories: 0, latestYear: '-', people: 0 },
+          audioPlaying: false,
 
           // Seed demo achievements (was previously misplaced on prototype)
           seed() {
@@ -411,10 +415,9 @@
           },
 
           init() {
-            // Theme
-            const saved = localStorage.getItem('aiba-hof-theme');
-            this.theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-            document.documentElement.classList.toggle('dark', this.theme === 'dark');
+            // Force light theme only
+            this.theme = 'light';
+            document.documentElement.classList.remove('dark');
 
             // Demo dataset
             this.data = this.seed();
@@ -424,10 +427,15 @@
             this.computeStats();
           },
 
-          toggleTheme() {
-            this.theme = this.theme === 'dark' ? 'light' : 'dark';
-            document.documentElement.classList.toggle('dark', this.theme === 'dark');
-            localStorage.setItem('aiba-hof-theme', this.theme);
+          toggleAudio() {
+            const el = document.getElementById('bg-audio');
+            if (!el) return;
+            if (el.paused) {
+              el.play().then(() => { this.audioPlaying = true; }).catch(() => {});
+            } else {
+              el.pause();
+              this.audioPlaying = false;
+            }
           },
 
           formatDate(d) {
