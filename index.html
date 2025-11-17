@@ -160,6 +160,13 @@
       .confetti-container { position: fixed; inset: 0; pointer-events: none; z-index: 60; overflow: hidden; }
       .confetti-piece { position: absolute; top: -10px; width: 6px; height: 10px; border-radius: 1px; opacity: .9; animation: confetti-fall var(--dur,3.2s) linear forwards; }
       @keyframes confetti-fall { to { transform: translateY(110vh) rotate(540deg);} }
+      /* Logo marquee */
+      .logo-marquee { position: relative; overflow: hidden; }
+      .logo-track { display: flex; gap: 2rem; animation: marquee-scroll 25s linear infinite; white-space: nowrap; }
+      .logo-track:hover { animation-play-state: paused; }
+      @keyframes marquee-scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+      .partner-logo { height: 48px; width: auto; object-fit: contain; filter: none; opacity: 1; transition: transform 0.3s; }
+      .partner-logo:hover { transform: scale(1.1); }
     </style>
   </head>
   <body x-data="hofApp()" x-init="init()" class="bg-gray-50 font-inter">
@@ -269,6 +276,27 @@
                     <div class="mt-2 text-4xl font-extrabold" style="color: var(--brand-blue)" x-text="c.people"></div>
                   </div>
                 </div>
+                <div class="mt-5 p-4 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
+                  <div class="flex items-center gap-2 mb-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" style="color: var(--brand-amber)">
+                      <path d="M12 2l3 7h7l-5.5 4.1L18 21l-6-3.8L6 21l1.5-7.9L2 9h7z"/>
+                    </svg>
+                    <h4 class="text-sm font-semibold text-gray-700 dark:text-gray-300">Recognized By</h4>
+                  </div>
+                  <div class="logo-marquee">
+                    <div class="logo-track">
+                      <img src="photos/logos/nasaspaceapps.png" alt="NASA Space Apps Challenge" class="partner-logo" loading="lazy" />
+                      <img src="photos/logos/brac university.jpg" alt="BRAC University" class="partner-logo" loading="lazy" />
+                      <img src="photos/logos/unesco dhaka.jpg" alt="UNESCO Dhaka" class="partner-logo" loading="lazy" />
+                      <img src="photos/aibalogo.jpg" alt="AIBA Sylhet" class="partner-logo" loading="lazy" />
+                      <!-- Duplicate set for seamless loop -->
+                      <img src="photos/logos/nasaspaceapps.png" alt="NASA Space Apps Challenge" class="partner-logo" loading="lazy" />
+                      <img src="photos/logos/brac university.jpg" alt="BRAC University" class="partner-logo" loading="lazy" />
+                      <img src="photos/logos/unesco dhaka.jpg" alt="UNESCO Dhaka" class="partner-logo" loading="lazy" />
+                      <img src="photos/aibalogo.jpg" alt="AIBA Sylhet" class="partner-logo" loading="lazy" />
+                    </div>
+                  </div>
+                </div>
                 <div class="mt-6 p-4 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 flex items-center gap-3">
                   <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" style="color: var(--brand-green)"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
                   <p class="text-sm text-gray-700 dark:text-gray-300">Greatness grows from consistent effort and the courage to aim higher.</p>
@@ -276,6 +304,8 @@
               </div>
             </div>
           </div>
+
+          
         </div>
       </div>
     </header>
