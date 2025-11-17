@@ -167,6 +167,8 @@
       @keyframes marquee-scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
       .partner-logo { height: 48px; width: auto; object-fit: contain; filter: none; opacity: 1; transition: transform 0.3s; }
       .partner-logo:hover { transform: scale(1.1); }
+      .org-logo { height: 20px; width: auto; object-fit: contain; }
+      .org-logo-lg { height: 28px; width: auto; object-fit: contain; }
     </style>
   </head>
   <body x-data="hofApp()" x-init="init()" class="bg-gray-50 font-inter">
@@ -325,17 +327,38 @@
             </div>
             <div class="p-6">
               <p class="text-xs font-semibold" style="color: var(--brand-amber)" x-text="formatDate(item.date)"></p>
-              <h3 class="text-xl font-bold text-gray-900 dark:text-white mt-1" x-text="item.title"></h3>
-              <p class="text-gray-700 dark:text-gray-300 mt-1 font-medium" x-text="item.subtitle"></p>
-              <p class="text-gray-600 dark:text-gray-400 mt-3 line-clamp-3" x-text="item.description"></p>
+              <h3 class="text-xl font-bold text-gray-900 dark:text-white mt-1" x-text="eventName(item)"></h3>
+              <div class="mt-1 text-sm text-gray-600 dark:text-gray-300" x-show="item.team || item.teamName">
+                <span class="font-semibold">Team/Participant (s):</span>
+                <span x-text="teamFull(item)"></span>
+                <template x-if="item.batches">
+                  <span class="ml-2 inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold border border-brand-green/40 text-brand-green bg-white dark:bg-gray-900">
+                    <span>Batch:</span>
+                    <span class="ml-1" x-text="item.batches"></span>
+                  </span>
+                </template>
+              </div>
+              <p class="mt-2 text-gray-700 dark:text-gray-300 font-medium" x-text="achievementText(item)"></p>
+              <!-- Highlighted achievement status & metadata before logos -->
+              <div class="mt-3 flex flex-wrap items-center gap-3">
+                <template x-if="item.status">
+                  <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-brand-blue text-white border border-brand-blue" x-text="item.status"></span>
+                </template>
+              </div>
               <div class="mt-4 flex flex-wrap gap-2">
                 <template x-for="t in item.tags" :key="t">
                   <span class="px-2 py-1 rounded-full text-xs bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700" x-text="t"></span>
                 </template>
               </div>
+              <!-- Organizations (logos) -->
+              <div class="mt-4 flex items-center gap-3" x-show="item.organizations && item.organizations.length">
+                <template x-for="org in item.organizations.slice(0,3)" :key="org.name">
+                  <img :src="org.logo" :alt="org.name" class="org-logo" loading="lazy" />
+                </template>
+              </div>
               <div class="mt-5 flex items-center justify-between">
                 <button @click="openModal(item)" class="inline-flex items-center gap-2 font-semibold" style="color: var(--brand-blue)">
-                  View details
+                  See more
                   <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
                 </button>
                 <div class="text-xs text-gray-500 dark:text-gray-400" x-text="item.location"></div>
@@ -407,8 +430,50 @@
             </div>
             <h3 class="mt-3 text-2xl font-bold text-gray-900 dark:text-white" x-text="active?.title"></h3>
             <p class="text-sm text-amber-700 dark:text-amber-400 mt-1" x-text="formatDate(active?.date)"></p>
-            <p class="text-gray-700 dark:text-gray-300 mt-2" x-text="active?.team ? ('Team: ' + active?.team) : active?.subtitle"></p>
+            <p class="text-gray-700 dark:text-gray-300 mt-2" x-text="active?.subtitle"></p>
             <p class="text-gray-600 dark:text-gray-400 mt-4" x-text="active?.description"></p>
+            <!-- Organizations -->
+            <div class="mt-4" x-show="active?.organizations && active.organizations.length">
+              <div class="text-xs uppercase tracking-wide text-gray-500 mb-2">Associated</div>
+              <div class="flex items-center gap-3 flex-wrap">
+                <template x-for="org in active.organizations" :key="org.name">
+                  <div class="inline-flex items-center gap-2">
+                    <img :src="org.logo" :alt="org.name" class="org-logo-lg" loading="lazy"/>
+                    <span class="text-sm text-gray-700 dark:text-gray-300" x-text="org.name"></span>
+                  </div>
+                </template>
+              </div>
+            </div>
+            <!-- Links -->
+            <div class="mt-4" x-show="active?.links && active.links.length">
+              <div class="text-xs uppercase tracking-wide text-gray-500 mb-2">Project Links</div>
+              <div class="flex flex-wrap gap-2">
+                <template x-for="l in active.links" :key="l.url">
+                  <a :href="l.url" target="_blank" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border border-brand-blue text-brand-blue hover:bg-brand-blue/10 text-sm">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor"><path d="M3 12a1 1 0 011-1h8a1 1 0 010 2H4a1 1 0 01-1-1zm15.293-7.707a1 1 0 011.414 0l2.707 2.707a1 1 0 010 1.414l-8.486 8.486a1 1 0 01-.53.277l-3.536.707a1 1 0 01-1.177-1.177l.707-3.536a1 1 0 01.277-.53l8.486-8.486z"/></svg>
+                    <span x-text="l.label"></span>
+                  </a>
+                </template>
+              </div>
+            </div>
+            <!-- Team -->
+            <div class="mt-4" x-show="active?.team && active.team.length">
+              <div class="text-xs uppercase tracking-wide text-gray-500 mb-2">Team</div>
+              <ul class="space-y-1">
+                <template x-for="m in active.team" :key="m.name">
+                  <li class="text-sm text-gray-700 dark:text-gray-300"><span class="font-semibold" x-text="m.name"></span><span x-text="m.role ? ' — ' + m.role : ''"></span></li>
+                </template>
+              </ul>
+            </div>
+            <!-- Gallery -->
+            <div class="mt-4" x-show="active?.gallery && active.gallery.length">
+              <div class="text-xs uppercase tracking-wide text-gray-500 mb-2">Gallery</div>
+              <div class="grid grid-cols-3 gap-2">
+                <template x-for="g in active.gallery" :key="g">
+                  <img :src="g" alt="gallery" class="w-full h-20 object-cover rounded-md border border-gray-200 dark:border-gray-800" loading="lazy"/>
+                </template>
+              </div>
+            </div>
             <div class="mt-4 flex flex-wrap gap-2">
               <template x-for="t in (active?.tags || [])" :key="t">
                 <span class="px-2 py-1 rounded-full text-xs bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700" x-text="t"></span>
@@ -473,6 +538,101 @@
               { id: 20, title: 'IEEE Access Journal Publication', team: 'Proma, Rafi, Afsara', date: '2025-05-18', category: 'Research', location: 'Online', tags: ['Publication','Energy','IoT'], image: 'https://images.unsplash.com/photo-1553877522-43269d4ea984?q=80&w=1200&auto=format&fit=crop', description: 'Published article on predictive maintenance of solar micro-grids with edge IoT.' },
               { id: 21, title: 'National Cybersecurity CTF Top 10', team: 'AIBA SecOps', date: '2024-10-02', category: 'Competition', location: 'Online', tags: ['Cybersecurity','CTF','Forensics'], image: 'https://images.unsplash.com/photo-1510511459019-5dda7724fd87?q=80&w=1200&auto=format&fit=crop', description: 'Finished top 10 nationally solving reverse engineering and crypto challenges.' },
               { id: 22, title: 'Badminton Doubles Gold', team: 'AIBA Smash Squad', date: '2023-06-18', category: 'Sports', location: 'Sylhet', tags: ['Badminton','Gold'], image: 'https://images.unsplash.com/photo-1605296867304-46d5465a13f1?q=80&w=1200&auto=format&fit=crop', description: 'Won gold in inter-department badminton doubles through agile coordination.' }
+              ,
+              {
+                id: 23,
+                title: 'Strategic Innovation in Orbit: A Business Student Team’s Journey at NASA Space Apps Challenge 2025',
+                subtitle: 'OrbitBiZ: Pioneering Sustainable LEO Commerce',
+                date: '2025-10-05',
+                category: 'Competition',
+                location: 'Sylhet',
+                event: 'NASA International Space Apps Challenge 2025',
+                teamName: 'AIBA SpaceWeb',
+                featured: true,
+                status: 'Global Nominee & 1st Runner-up (Sylhet)',
+                batches: 'BBA-11 & BBA-12',
+                tags: ['NASA Space Apps 2025','LEO','Business Strategy','AI','Mapbox'],
+                image: 'photos/AIBA SpaceWeb/photos 01.jpg',
+                description: "OrbitBiZ is a SIaaS platform for sustainable LEO commerce — tracking objects with NASA data, predicting collisions with AI, and delivering interactive maps with a clear business model.",
+                links: [
+                  { label: 'Project', url: 'https://orbitbiz.gmrafi.com/' },
+                  { label: 'Project Page', url: 'https://www.spaceappschallenge.org/.../aiba-spaceweb/...' },
+                  { label: 'GitHub', url: 'https://github.com/gmrafi/OrbitEdge' }
+                ],
+                team: [
+                  { name: 'Md Golam Mubasshir Rafi', role: 'Business Analytics & Technical Lead' },
+                  { name: 'Mshrura Meshkat Punno', role: 'Financial Modeling & Strategy' },
+                  { name: 'Al Razi', role: 'Market Analysis & Operations' },
+                  { name: 'Rukaiya Binte Amin', role: 'Risk Assessment & Compliance' },
+                  { name: 'Israt Zarin Ruponty', role: 'Researcher' },
+                  { name: 'S M Mosaddad Ali', role: 'Researcher' }
+                ],
+                organizations: [
+                  { name: 'NASA Space Apps', logo: 'photos/logos/nasaspaceapps.png' },
+                  { name: 'AIBA Sylhet', logo: 'photos/aibalogo.jpg' }
+                ],
+                gallery: [
+                  'photos/AIBA SpaceWeb/photos 01.jpg',
+                  'photos/AIBA SpaceWeb/ph 0.jpg',
+                  'photos/AIBA SpaceWeb/ph 2.jpg',
+                  'photos/AIBA SpaceWeb/ph 3.jpg'
+                ]
+              },
+              {
+                id: 24,
+                title: 'Third Place (English) — Disability Equality in the Media Essay 2024',
+                subtitle: 'Mainstreaming Disability in Media’s Newsroom and Programming',
+                date: '2024-12-03',
+                category: 'Competition',
+                location: 'Dhaka',
+                event: 'Disability Equality in the Media — Essay Competition 2024',
+                teamName: 'Mashrura Meshkat Punno',
+                featured: true,
+                status: 'Winner & 2nd Runner up (English Segment)',
+                batches: 'BBA-11',
+                tags: ['Essay','UNESCO','Accessibility','English Segment','Top 3'],
+                image: 'photos/UNESCO-Punno/495382315_1126558322829123_7417690542584040103_n.jpg',
+                description: 'Secured 3rd place (English segment) in the “Disability Equality in the Media” essay competition, organized by Somashte in collaboration with UNESCO.',
+                organizations: [
+                  { name: 'UNESCO Dhaka', logo: 'photos/logos/unesco dhaka.jpg' },
+                  { name: 'AIBA Sylhet', logo: 'photos/aibalogo.jpg' }
+                ],
+                team: [
+                  { name: 'Mashrura Meshkat Punno', role: 'Winner — English Segment (3rd)' }
+                ],
+                gallery: [
+                  'photos/UNESCO-Punno/495382315_1126558322829123_7417690542584040103_n.jpg',
+                  'photos/UNESCO-Punno/504214209_1126557912829164_1752817690339759817_n.jpg'
+                ]
+              }
+              ,
+              {
+                id: 25,
+                title: 'Sylhet Divisional Champion — Imagen Ventures Youth Challenge 2024-25',
+                subtitle: 'Entrepreneurship & Innovation — Divisional Champion',
+                date: '2024-09-20',
+                category: 'Competition',
+                location: 'Sylhet',
+                event: 'Imagen Ventures Youth Challenge 2024-25',
+                teamName: 'Numb Brain',
+                status: 'Sylhet Divisional Champion',
+                featured: true,
+                batches: 'BBA-12',
+                tags: ['Entrepreneurship','Innovation','Youth Challenge','Sylhet'],
+                image: 'photos/Imagen Ventures Youth Challenge 2024-25/photos 1.jpg',
+                description: 'Team “Numb Brain” won the Sylhet divisional round, earning a spot at the national finals organized by JAAGO Foundation in partnership with UNICEF.',
+                organizations: [
+                  { name: 'AIBA Sylhet', logo: 'photos/aibalogo.jpg' }
+                ],
+                team: [
+                  { name: 'Saraf Nawar Rodela' },
+                  { name: 'Sabikunnahar Mahi' },
+                  { name: 'Tahsan Faiz Naeem' }
+                ],
+                gallery: [
+                  'photos/Imagen Ventures Youth Challenge 2024-25/photos 1.jpg'
+                ]
+              }
             ];
           },
 
@@ -577,6 +737,34 @@
             const date = new Date(d);
             return date.toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: '2-digit' });
           },
+          eventName(item){ return item.event || item.category || ''; },
+          teamInline(item){
+            const name = item.teamName || '';
+            if (Array.isArray(item.team) && item.team.length){
+              const first = item.team.map(m => m.name).filter(Boolean);
+              const shown = first.slice(0, 3).join(', ');
+              const more = first.length > 3 ? ` +${first.length-3} more` : '';
+              return (name ? name + ' — ' : '') + shown + more;
+            }
+            return name || (item.team || '');
+          },
+          teamFull(item){
+            const tn = item.teamName || '';
+            if (Array.isArray(item.team) && item.team.length){
+              const arr = item.team.map(m => m.name).filter(Boolean);
+              const names = arr.join(', ');
+              if (arr.length === 1 && tn && tn.toLowerCase() === arr[0].toLowerCase()) return tn;
+              return tn ? `${tn} (${names})` : `(${names})`;
+            }
+            return tn || (item.team || '');
+          },
+          achievementText(item){
+            return item.subtitle || item.title || '';
+          },
+          ownerType(item){
+            if (Array.isArray(item.team)) return item.team.length > 1 ? 'Team' : 'Person';
+            return (item.teamName && (!item.team || (Array.isArray(item.team) && item.team.length <= 1))) ? 'Person' : 'Team';
+          },
 
           toggleCategory(cat) {
             const i = this.selectedCategories.indexOf(cat);
@@ -603,7 +791,11 @@
             this.stats.categories = new Set(this.data.map(d => d.category)).size;
             this.stats.latestYear = Math.max(...this.data.map(d => new Date(d.date).getFullYear()));
             // naive people count by splitting names by comma/and in team/subtitle
-            const names = this.data.flatMap(d => (d.team || d.subtitle || '').split(/[,&()]/).map(s => s.trim()).filter(s => /[A-Za-z]/.test(s)));
+            const names = this.data.flatMap(d => {
+              if (Array.isArray(d.team)) return d.team.map(m => m.name).filter(Boolean);
+              const src = (d.team || d.subtitle || '');
+              return src.split(/[,&()]/).map(s => s.trim()).filter(s => /[A-Za-z]/.test(s));
+            });
             this.stats.people = new Set(names).size || this.data.length; // fallback
           },
 
@@ -613,24 +805,28 @@
             const hasCats = this.selectedCategories.length > 0;
 
             let arr = this.data.filter(d => {
-              const matchQuery = !q || [d.title, (d.team || d.subtitle), d.description, ...(d.tags||[])].join(' ').toLowerCase().includes(q);
+              const teamText = Array.isArray(d.team) ? d.team.map(m => m.name + ' ' + (m.role||'')).join(' ') : (d.team || d.subtitle || '');
+              const matchQuery = !q || [d.title, teamText, d.description, ...(d.tags||[])].join(' ').toLowerCase().includes(q);
               const matchYear = !year || new Date(d.date).getFullYear().toString() === year.toString();
               const matchCat = !hasCats || this.selectedCategories.includes(d.category);
               return matchQuery && matchYear && matchCat;
             });
 
-            // sort
+            // sort with featured items first, then by selected field
             const [field, dir] = this.sort.split('-');
-            arr.sort((a,b) => {
+            const cmp = (a,b) => {
+              const af = !!a.featured, bf = !!b.featured;
+              if (af !== bf) return af ? -1 : 1; // featured first
               if (field === 'date') {
                 const da = new Date(a.date).getTime();
                 const db = new Date(b.date).getTime();
                 return dir === 'asc' ? da - db : db - da;
               }
-              const ta = a.title.toLowerCase();
-              const tb = b.title.toLowerCase();
+              const ta = (a.title||'').toLowerCase();
+              const tb = (b.title||'').toLowerCase();
               return dir === 'asc' ? (ta > tb ? 1 : ta < tb ? -1 : 0) : (ta < tb ? 1 : ta > tb ? -1 : 0);
-            });
+            };
+            arr.sort(cmp);
 
             this.filtered = arr;
             this.visibleItems = resetVisible ? arr.slice(0, this.pageSize) : arr.slice(0, Math.max(this.visibleItems.length || this.pageSize, this.pageSize));
